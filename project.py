@@ -15,6 +15,7 @@ lsbox = tk.Listbox(gui,height=10,width=20, yscrollcommand = sb.set)
 lsbox.grid(row=2,column=1,padx=20,pady=20)
 TrashIcon = tksvg.SvgImage(file = "assets/trash.svg")
 text = tk.Label(text="File Manager")
+indir = "/"
 
 
 
@@ -55,6 +56,7 @@ def filesInDir(dir:str):
 def openDir(dir):
 
   if not os.path.isdir(dir):
+    global indir
     try:
       run(dir)
       return
@@ -73,6 +75,8 @@ def openDir(dir):
     currentDirButtons.append(bt)
     x += 1
   sb.config( command = lsbox.yview )
+  indir = dirbox.get()
+  
 
 previousClick = ""
 def onClick(event):
@@ -82,11 +86,11 @@ def onClick(event):
     index = selection[0]
     data = event.widget.get(index)
     if previousClick == data:
-      chardir = list(dirbox.get())
+      chardir = list(indir)
       if chardir[len(chardir)-1] == "/":
-        newDir = dirbox.get() + data
+        newDir = indir + data
       else:
-        newDir =dirbox.get() + "/" + data
+        newDir =indir + "/" + data
       openDir(newDir)
       previousClick = ""
       dirbox.delete(0, tk.END)
@@ -101,28 +105,28 @@ def onClick(event):
 lsbox.bind("<<ListboxSelect>>", onClick)
 
 def confirm(event):
-  openDir(dirbox.get())
+  openDir(indir)
 
 gui.bind('<Return>', confirm)
 
 
 
-enterButton = tk.Button(gui,text="Enter",command=lambda: openDir(dirbox.get()) ,anchor=tk.N)
+enterButton = tk.Button(gui,text="Enter",command=lambda: openDir(indir) ,anchor=tk.N)
 
 def upDir(dir):
-  newDir = getPrevDir(dirbox.get())
+  newDir = getPrevDir(indir)
   dirbox.delete(0,tk.END)
   dirbox.insert(0,newDir)
   openDir(newDir)
 
 def delMode():
   selected = lsbox.get(tk.ACTIVE)
-  dir = list(dirbox.get())
+  dir = list(indir)
   if dir[len(dir) -1 == "/"]:
-    rmdir = dirbox.get() + selected
+    rmdir = indir + selected
   else:
 
-    rmdir = dirbox.get() + "/" + selected
+    rmdir = indir + "/" + selected
   if os.path.isdir(rmdir):
 
     rmtree(dir + "/" + selected)
@@ -132,7 +136,7 @@ def delMode():
 
 
 
-upButton = tk.Button(gui,text="^", command=lambda: upDir(dirbox.get()))
+upButton = tk.Button(gui,text="^", command=lambda: upDir(indir))
 delButton = tk.Button(gui, text="D", command=delMode, image=TrashIcon)
 text.grid(column=1,row=1) 
 
