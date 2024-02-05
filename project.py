@@ -116,10 +116,19 @@ def upDir(dir):
   openDir(newDir)
 
 def delMode():
-  dir = dirbox.get()
   selected = lsbox.get(tk.ACTIVE)
-  rmtree(dir + "/" + selected)
-  openDir(dir)
+  dir = list(dirbox.get())
+  if dir[len(dir) -1 == "/"]:
+    rmdir = dirbox.get() + selected
+  else:
+
+    rmdir = dirbox.get() + "/" + selected
+  if os.path.isdir(rmdir):
+
+    rmtree(dir + "/" + selected)
+    openDir(dir)
+  else:
+    os.remove(rmdir)
 
 
 
