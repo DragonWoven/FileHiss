@@ -3,6 +3,10 @@ import os
 from subprocess import run
 from shutil import rmtree
 import tksvg
+import Settings
+import json
+
+
 
 
 gui = tk.Tk()
@@ -14,10 +18,14 @@ sb.grid(row=2, column=1,  sticky='e')
 lsbox = tk.Listbox(gui,height=10,width=20, yscrollcommand = sb.set)
 lsbox.grid(row=2,column=1,padx=20,pady=20)
 TrashIcon = tksvg.SvgImage(file = "assets/trash.svg")
+SettingsIcon = tksvg.SvgImage(file = "assets/settings.svg")
 text = tk.Label(text="File Manager")
-indir = "/"
-
-
+indir = Settings.getDefaultDir()
+defaultdir = Settings.getDefaultDir()
+# with open("settings.json", "r") as settingsFile:
+#   jsonSettings = json.load(settingsFile)
+#   indir = jsonSettings["defaultDir"]
+#   defaultdir = jsonSettings["defaultDir"]
 
 
 
@@ -40,6 +48,8 @@ def getPrevDir(Dir):
     newDir += character[x]
     x+=1
   return newDir
+
+
   
 def filesInDir(dir:str):
   files = []
@@ -134,10 +144,34 @@ def delMode():
   else:
     os.remove(rmdir)
 
+def openSettings():
+     
+    # Toplevel object which will 
+    # be treated as a new window
+    newWindow = tk.Toplevel(gui)
+ 
+    # sets the title of the
+    # Toplevel widget
+    newWindow.title("New Window")
+ 
+    # sets the geometry of toplevel
+    newWindow.geometry("200x200")
+    def setDefaultPath(path):
+      print("ran")
+    # A Label widget to show in toplevel
+    tk.Label(newWindow, 
+          text ="Default Path").pack()
+    defaultDir = tk.Entry(newWindow, text="/")
+
+    tk.Button(newWindow, text="Apply", command=lambda: Settings.setDefaultPath(defaultDir.get())).pack()
+    defaultDir.pack()
+    
+
 
 
 upButton = tk.Button(gui,text="^", command=lambda: upDir(indir))
 delButton = tk.Button(gui, text="D", command=delMode, image=TrashIcon)
+settingsButton = tk.Button(gui, text="D", command=openSettings, image=SettingsIcon)
 text.grid(column=1,row=1) 
 
 
@@ -146,12 +180,13 @@ dirbox.grid(column=1,row=0)
 enterButton.grid(column=2,row=0)
 upButton.grid(column=3,row=0)
 delButton.grid(column=4,row=0)
+settingsButton.grid(column=5,row=0)
 
 
-gui.geometry("250x250")
+gui.geometry("270x250")
 dirbox.delete(0,tk.END)
-dirbox.insert(0,"/")
-openDir("/")
+dirbox.insert(0,defaultdir)
+openDir(defaultdir)
 
 
 
