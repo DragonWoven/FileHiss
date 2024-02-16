@@ -51,7 +51,6 @@ def openDir(Dir):
   files = filesInDir(Dir)
   global currentDir
   setCurrentDir(Dir)
-  print(currentDir) 
   return files
     
 

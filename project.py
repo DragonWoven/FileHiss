@@ -29,7 +29,6 @@ def UpdateListBox(updatedList:list):
   
 def viewDir(Dir):
   UpdateListBox(openDir(Dir))
-  print(currentDir)
 
 previousClick = ""
 def onClick(event):
