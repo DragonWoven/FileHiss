@@ -98,34 +98,34 @@ def delCurrent():
   viewDir(getCurrentDir())
 
 
-def openSettings():
+# def openSettings():
      
-    # Toplevel object which will 
-    # be treated as a new window
-    newWindow = tk.Toplevel(gui)
+#     # Toplevel object which will 
+#     # be treated as a new window
+#     newWindow = tk.Toplevel(gui)
  
-    # sets the title of the
-    # Toplevel widget
-    newWindow.title("New Window")
+#     # sets the title of the
+#     # Toplevel widget
+#     newWindow.title("New Window")
  
-    # sets the geometry of toplevel
-    newWindow.geometry("200x200")
-    # A Label widget to show in toplevel
-    tk.Label(newWindow, 
-          text ="Default Path").pack()
-    defaultDir = tk.Entry(newWindow)
-    defaultDir.delete(0,tk.END)
-    defaultDir.insert(0,Settings.getDefaultDir())
+#     # sets the geometry of toplevel
+#     newWindow.geometry("200x200")
+#     # A Label widget to show in toplevel
+#     tk.Label(newWindow, 
+#           text ="Default Path").pack()
+#     defaultDir = tk.Entry(newWindow)
+#     defaultDir.delete(0,tk.END)
+#     defaultDir.insert(0,Settings.getDefaultDir())
 
-    tk.Button(newWindow, text="Apply", command=lambda: Settings.setDefaultPath(defaultDir.get())).pack()
-    defaultDir.pack()
+#     tk.Button(newWindow, text="Apply", command=lambda: Settings.setDefaultPath(defaultDir.get())).pack()
+#     defaultDir.pack()
     
 
 
 
 upButton = tk.Button(gui,text="^", command=lambda: upDir(getCurrentDir()))
 delButton = tk.Button(gui, text="D", command=delCurrent, image=TrashIcon)
-settingsButton = tk.Button(gui, text="D", command=openSettings, image=SettingsIcon)
+settingsButton = tk.Button(gui, text="D", command=lambda: Settings.openSettings(gui), image=SettingsIcon)
 text.grid(column=1,row=1) 
 
 
