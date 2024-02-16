@@ -1,7 +1,12 @@
-import tkinter as tk
-import os
+try:
+  import tkinter as tk
+except:
+  print("tkinter is missing!")
+try:
+  import tksvg
+except:
+  print("tkscg is missing!")
 from subprocess import run
-import tksvg
 import Settings
 from fileNav import *
 
@@ -10,8 +15,11 @@ from fileNav import *
 
 
 gui = tk.Tk()
+gui.minsize(230, 240)
+navFrame = tk.Frame(gui)
+navFrame.grid(row=0, column=1, sticky=tk.W+tk.E)
 gui.title("File Manager")
-dirbox = tk.Entry(gui)
+dirbox = tk.Entry(navFrame)
 currentDirButtons = []
 sb = tk.Scrollbar(gui)
 sb.grid(row=2, column=1,  sticky='e')
@@ -63,7 +71,7 @@ gui.bind('<Return>', confirm)
 
 
 
-enterButton = tk.Button(gui,text="Enter",command=lambda: viewDir(dirbox.get()) ,anchor=tk.N)
+enterButton = tk.Button(navFrame,text="Enter",command=lambda: viewDir(dirbox.get()) ,anchor=tk.N,)
 
 def upDir(Dir):
   newDir = getPrevDir(Dir)
@@ -121,7 +129,7 @@ delButton.grid(column=4,row=0)
 settingsButton.grid(column=5,row=0)
 
 
-gui.geometry("270x250")
+gui.geometry("230x240")
 dirbox.delete(0,tk.END)
 dirbox.insert(0,getCurrentDir())
 # openDir(defaultdir)
