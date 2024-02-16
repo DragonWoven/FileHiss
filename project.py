@@ -4,7 +4,8 @@ from subprocess import run
 from shutil import rmtree
 import tksvg
 import Settings
-import json
+from fileNav import *
+
 
 
 
@@ -20,73 +21,16 @@ lsbox.grid(row=2,column=1,padx=20,pady=20)
 TrashIcon = tksvg.SvgImage(file = "assets/trash.svg")
 SettingsIcon = tksvg.SvgImage(file = "assets/settings.svg")
 text = tk.Label(text="File Manager")
-indir = Settings.getDefaultDir()
-defaultdir = Settings.getDefaultDir()
-# with open("settings.json", "r") as settingsFile:
-#   jsonSettings = json.load(settingsFile)
-#   indir = jsonSettings["defaultDir"]
-#   defaultdir = jsonSettings["defaultDir"]
+setCurrentDir(Settings.getDefaultDir())
 
-
-
-
-
-def getPrevDir(Dir):
-  character = list(Dir)
-  pos = len(character) -1
-  done = False
-  
-  while not done:
-    if character[pos] == "/":
-      pos
-      done = True
-    else:
-      pos -= 1
-  newDir = ""
-  x = 0
-  while x != pos:
-    newDir += character[x]
-    x+=1
-  return newDir
-
-
-  
-def filesInDir(dir:str):
-  files = []
-  try:
-    scan = os.scandir(dir)
-  except:
-    lsbox.delete(0,tk.END)
-    lsbox.insert(0,"No Such Directory")
-    return
-  for i in scan:
-    files.append(i.name)
-  return files
-
-def openDir(dir):
-
-  if not os.path.isdir(dir):
-    global indir
-    try:
-      run(dir)
-      return
-    except:
-      lsbox.delete(0,tk.END)
-      lsbox.insert(0,"Cannot Open File")
+def UpdateListBox(updatedList:list):
   lsbox.delete(0,tk.END)
-  text=dir
-  files = filesInDir(text)
-  if files == None:
-    return
-  x = 2
-  for i in files:
-    bt = tk.Button(gui,text=i,anchor=tk.CENTER)
-    lsbox.insert(tk.END, i)
-    currentDirButtons.append(bt)
-    x += 1
-  sb.config( command = lsbox.yview )
-  indir = dirbox.get()
+  for i in updatedList:
+    lsbox.insert(tk.END,i)
   
+def viewDir(Dir):
+  UpdateListBox(openDir(Dir))
+  print(currentDir)
 
 previousClick = ""
 def onClick(event):
@@ -96,12 +40,12 @@ def onClick(event):
     index = selection[0]
     data = event.widget.get(index)
     if previousClick == data:
-      chardir = list(indir)
+      chardir = list(getCurrentDir())
       if chardir[len(chardir)-1] == "/":
-        newDir = indir + data
+        newDir = getCurrentDir() + data
       else:
-        newDir =indir + "/" + data
-      openDir(newDir)
+        newDir = getCurrentDir() + "/" + data
+      viewDir(newDir)
       previousClick = ""
       dirbox.delete(0, tk.END)
       dirbox.insert(0, newDir)
@@ -115,19 +59,19 @@ def onClick(event):
 lsbox.bind("<<ListboxSelect>>", onClick)
 
 def confirm(event):
-  openDir(indir)
+  viewDir(dirbox.get())
 
 gui.bind('<Return>', confirm)
 
 
 
-enterButton = tk.Button(gui,text="Enter",command=lambda: openDir(indir) ,anchor=tk.N)
+enterButton = tk.Button(gui,text="Enter",command=lambda: viewDir(dirbox.get()) ,anchor=tk.N)
 
-def upDir(dir):
-  newDir = getPrevDir(indir)
+def upDir(Dir):
+  newDir = getPrevDir(Dir)
   dirbox.delete(0,tk.END)
   dirbox.insert(0,newDir)
-  openDir(newDir)
+  viewDir(newDir)
 
 def delMode():
   selected = lsbox.get(tk.ACTIVE)
@@ -156,12 +100,12 @@ def openSettings():
  
     # sets the geometry of toplevel
     newWindow.geometry("200x200")
-    def setDefaultPath(path):
-      print("ran")
     # A Label widget to show in toplevel
     tk.Label(newWindow, 
           text ="Default Path").pack()
-    defaultDir = tk.Entry(newWindow, text="/")
+    defaultDir = tk.Entry(newWindow)
+    defaultDir.delete(0,tk.END)
+    defaultDir.insert(0,Settings.getDefaultDir())
 
     tk.Button(newWindow, text="Apply", command=lambda: Settings.setDefaultPath(defaultDir.get())).pack()
     defaultDir.pack()
@@ -169,7 +113,7 @@ def openSettings():
 
 
 
-upButton = tk.Button(gui,text="^", command=lambda: upDir(indir))
+upButton = tk.Button(gui,text="^", command=lambda: upDir(getCurrentDir()))
 delButton = tk.Button(gui, text="D", command=delMode, image=TrashIcon)
 settingsButton = tk.Button(gui, text="D", command=openSettings, image=SettingsIcon)
 text.grid(column=1,row=1) 
@@ -185,8 +129,9 @@ settingsButton.grid(column=5,row=0)
 
 gui.geometry("270x250")
 dirbox.delete(0,tk.END)
-dirbox.insert(0,defaultdir)
-openDir(defaultdir)
+dirbox.insert(0,getCurrentDir())
+# openDir(defaultdir)
+viewDir(getCurrentDir())
 
 
 

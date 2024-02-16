@@ -1,11 +1,24 @@
+import os
+currentDir = "/"
+def setCurrentDir(Dir):
+  global currentDir
+  currentDir = Dir
+
+
+
 def getPrevDir(Dir):
   character = list(Dir)
+  if len(character) <= 1:
+    return "/"
   pos = len(character) -1
+  if character[pos] == "/":
+    pos -= 1
+  
+  
   done = False
   
   while not done:
     if character[pos] == "/":
-      pos
       done = True
     else:
       pos -= 1
@@ -14,18 +27,29 @@ def getPrevDir(Dir):
   while x != pos:
     newDir += character[x]
     x+=1
-  return newDir
+  if newDir == "":
+    return "/"
+  else:
+    return newDir
 
+def getCurrentDir():
+  global currentDir
+  return currentDir
+def filesInDir(Dir:str):
+  files = []
+  scan = []
+  try:
+      scan = os.scandir(Dir)
+  except:
+      ValueError("Not a Directory")
+  for i in scan:
+      files.append(i.name)
+  return files
 
-  def filesInDir(dir:str):
-    files = []
-    try:
-        scan = os.scandir(dir)
-    except:
-        ValueError("Not a Directory")
-    for i in scan:
-        files.append(i.name)
-    return files
-
-    def openDir(dir):
-        files = filesInDir()
+def openDir(Dir):
+  files = filesInDir(Dir)
+  global currentDir
+  setCurrentDir(Dir)
+  print(currentDir) 
+  return files
+    
