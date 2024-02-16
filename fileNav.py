@@ -42,16 +42,19 @@ def filesInDir(Dir:str):
   try:
       scan = os.scandir(Dir)
   except:
-      ValueError("Not a Directory")
+      raise ValueError("Not a Directory")
   for i in scan:
       files.append(i.name)
   return files
 
 def openDir(Dir):
-  files = filesInDir(Dir)
-  global currentDir
-  setCurrentDir(Dir)
-  return files
+  if os.path.isdir(Dir):
+    files = filesInDir(Dir)
+    global currentDir
+    setCurrentDir(Dir)
+    return files
+  else:
+    raise ValueError("Not A Directory")
     
 
 def delete(Dir):
@@ -59,3 +62,4 @@ def delete(Dir):
     rmtree(dir + "/" + selected)
   else:
     os.remove(Dir)
+

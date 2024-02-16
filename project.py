@@ -1,13 +1,16 @@
+hasDepends = True
 try:
   import tkinter as tk
 except:
+  hasDepends = False
   print("tkinter is missing!")
-  return
 try:
   import tksvg
 except:
+  hasDepends = False
   print("tksvg is missing!")
-  return
+if not hasDepends:
+  exit()
 from subprocess import run
 import Settings
 from fileNav import *
@@ -38,7 +41,10 @@ def UpdateListBox(updatedList:list):
     lsbox.insert(tk.END,i)
   
 def viewDir(Dir):
-  UpdateListBox(openDir(Dir))
+  try:
+    UpdateListBox(openDir(Dir))
+  except:
+    pass
 
 previousClick = ""
 def onClick(event):
