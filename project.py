@@ -2,10 +2,12 @@ try:
   import tkinter as tk
 except:
   print("tkinter is missing!")
+  return
 try:
   import tksvg
 except:
-  print("tkscg is missing!")
+  print("tksvg is missing!")
+  return
 from subprocess import run
 import Settings
 from fileNav import *
