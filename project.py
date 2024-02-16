@@ -1,7 +1,6 @@
 import tkinter as tk
 import os
 from subprocess import run
-from shutil import rmtree
 import tksvg
 import Settings
 from fileNav import *
@@ -73,20 +72,16 @@ def upDir(Dir):
   dirbox.insert(0,newDir)
   viewDir(newDir)
 
-def delMode():
+def delCurrent():
   selected = lsbox.get(tk.ACTIVE)
-  dir = list(indir)
-  if dir[len(dir) -1 == "/"]:
-    rmdir = indir + selected
+  Dir = list(getCurrentDir())
+  if Dir[len(Dir) - 1] == "/":
+    rmdir = getCurrentDir() + selected
   else:
+    rmdir = getCurrentDir() + "/" + selected
+  delete(rmdir)
+  viewDir(getCurrentDir())
 
-    rmdir = indir + "/" + selected
-  if os.path.isdir(rmdir):
-
-    rmtree(dir + "/" + selected)
-    openDir(dir)
-  else:
-    os.remove(rmdir)
 
 def openSettings():
      
@@ -114,7 +109,7 @@ def openSettings():
 
 
 upButton = tk.Button(gui,text="^", command=lambda: upDir(getCurrentDir()))
-delButton = tk.Button(gui, text="D", command=delMode, image=TrashIcon)
+delButton = tk.Button(gui, text="D", command=delCurrent, image=TrashIcon)
 settingsButton = tk.Button(gui, text="D", command=openSettings, image=SettingsIcon)
 text.grid(column=1,row=1) 
 

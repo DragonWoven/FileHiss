@@ -1,4 +1,5 @@
 import os
+from shutil import rmtree
 currentDir = "/"
 def setCurrentDir(Dir):
   global currentDir
@@ -53,3 +54,9 @@ def openDir(Dir):
   print(currentDir) 
   return files
     
+
+def delete(Dir):
+  if os.path.isdir(Dir):
+    rmtree(dir + "/" + selected)
+  else:
+    os.remove(Dir)
