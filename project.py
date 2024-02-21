@@ -44,7 +44,7 @@ def viewDir(Dir):
   try:
     UpdateListBox(openDir(Dir))
   except:
-    pass
+    runFile(Dir)
 
 previousClick = ""
 def onClick(event):

@@ -1,5 +1,6 @@
 import os
 from shutil import rmtree
+import subprocess
 currentDir = "/"
 def setCurrentDir(Dir):
   global currentDir
@@ -63,3 +64,54 @@ def delete(Dir):
   else:
     os.remove(Dir)
 
+def getFile(Dir):
+  character = list(Dir)
+  endsWithSlash = False
+  if len(character) <= 1:
+    return "/"
+  pos = len(character) -1
+  if character[pos] == "/":
+    pos -= 1
+    endsWithSlash = True
+  
+  
+  done = False
+  file = ""
+  while not done:
+    if character[pos] == "/":
+      done = True
+    else:
+      pos -= 1
+  pos += 1
+  length = len(character)
+  if endsWithSlash:
+    length -= 1
+
+  while pos != length:
+    file += character[pos]
+    pos += 1
+  return file
+
+def getFileExtension(File):
+  characters = list(File)
+  pos = len(characters) -1
+  extension = ""
+  while characters[pos] != ".":
+    pos -=1
+  while pos != len(characters):
+    extension += characters[pos]
+    pos += 1
+  return extension
+    
+
+  
+
+
+def runFile(Dir):
+  if os.path.isfile(Dir):
+    if getFileExtension(getFile(Dir)) == ".exe":
+      subprocess.Popen(Dir)
+  else:
+    raise ValueError("File doesn't exits")
+
+print(getFileExtension(getFile("assets/trash.svg")))
