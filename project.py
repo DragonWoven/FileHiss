@@ -1,4 +1,5 @@
 hasDepends = True
+hasTksvg = True
 try:
   import tkinter as tk
 except:
@@ -7,7 +8,7 @@ except:
 try:
   import tksvg
 except:
-  hasDepends = False
+  hasTksvg = False
   print("tksvg is missing!")
 if not hasDepends:
   exit()
@@ -30,8 +31,9 @@ sb = tk.Scrollbar(gui)
 sb.grid(row=2, column=1,  sticky='e')
 lsbox = tk.Listbox(gui,height=10,width=20, yscrollcommand = sb.set)
 lsbox.grid(row=2,column=1,padx=20,pady=20)
-TrashIcon = tksvg.SvgImage(file = "assets/trash.svg")
-SettingsIcon = tksvg.SvgImage(file = "assets/settings.svg")
+if hasTksvg:
+  TrashIcon = tksvg.SvgImage(file = "assets/trash.svg")
+  SettingsIcon = tksvg.SvgImage(file = "assets/settings.svg")
 text = tk.Label(text="File Manager")
 setCurrentDir(Settings.getDefaultDir())
 
@@ -97,9 +99,16 @@ def delCurrent():
   delete(rmdir)
   viewDir(getCurrentDir())
 
+
 upButton = tk.Button(navFrame,text="^", command=lambda: upDir(getCurrentDir()))
-delButton = tk.Button(navFrame, text="D", command=delCurrent, image=TrashIcon)
-settingsButton = tk.Button(navFrame, text="D", command=lambda: Settings.openSettings(gui), image=SettingsIcon)
+if hasTksvg:
+  
+  delButton = tk.Button(navFrame, text="D", command=delCurrent, image=TrashIcon)
+  settingsButton = tk.Button(navFrame, text="D", command=lambda: Settings.openSettings(gui), image=SettingsIcon)
+else:
+  delButton = tk.Button(navFrame, text="D", command=delCurrent)
+  settingsButton = tk.Button(navFrame, text="S", command=lambda: Settings.openSettings(gui))
+
 text.grid(column=1,row=1) 
 
 
