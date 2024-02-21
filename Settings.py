@@ -30,22 +30,27 @@ def setDefaultPath(path):
 
 def openSettings(rootWindow):
      
+
+    
     # Toplevel object which will 
     # be treated as a new window
     newWindow = tk.Toplevel(rootWindow)
- 
+    defaultDirFrame = tk.Frame(newWindow)
+    defaultDirFrame.grid(row=1,column=0) 
     # sets the title of the
     # Toplevel widget
-    newWindow.title("New Window")
+    newWindow.title("Settings")
  
     # sets the geometry of toplevel
     newWindow.geometry("200x200")
     # A Label widget to show in toplevel
-    tk.Label(newWindow, 
-          text ="Default Path").pack()
-    defaultDir = tk.Entry(newWindow)
+    Label = tk.Label(newWindow, text ="Default Path")
+    Label.grid(row=0,column=0)
+    
+    defaultDir = tk.Entry(defaultDirFrame)
     defaultDir.delete(0,tk.END)
     defaultDir.insert(0,getDefaultDir())
+    defaultDir.grid(row=1,column=2)
 
-    tk.Button(newWindow, text="Apply", command=lambda: setDefaultPath(defaultDir.get())).pack()
-    defaultDir.pack()
+    tk.Button(defaultDirFrame, text="Apply", command=lambda: setDefaultPath(defaultDir.get())).grid(row=0,column=3)
+    defaultDir.grid(column=0,row=0)

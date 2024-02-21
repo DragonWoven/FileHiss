@@ -97,50 +97,23 @@ def delCurrent():
   delete(rmdir)
   viewDir(getCurrentDir())
 
-
-# def openSettings():
-     
-#     # Toplevel object which will 
-#     # be treated as a new window
-#     newWindow = tk.Toplevel(gui)
- 
-#     # sets the title of the
-#     # Toplevel widget
-#     newWindow.title("New Window")
- 
-#     # sets the geometry of toplevel
-#     newWindow.geometry("200x200")
-#     # A Label widget to show in toplevel
-#     tk.Label(newWindow, 
-#           text ="Default Path").pack()
-#     defaultDir = tk.Entry(newWindow)
-#     defaultDir.delete(0,tk.END)
-#     defaultDir.insert(0,Settings.getDefaultDir())
-
-#     tk.Button(newWindow, text="Apply", command=lambda: Settings.setDefaultPath(defaultDir.get())).pack()
-#     defaultDir.pack()
-    
-
-
-
-upButton = tk.Button(gui,text="^", command=lambda: upDir(getCurrentDir()))
-delButton = tk.Button(gui, text="D", command=delCurrent, image=TrashIcon)
-settingsButton = tk.Button(gui, text="D", command=lambda: Settings.openSettings(gui), image=SettingsIcon)
+upButton = tk.Button(navFrame,text="^", command=lambda: upDir(getCurrentDir()))
+delButton = tk.Button(navFrame, text="D", command=delCurrent, image=TrashIcon)
+settingsButton = tk.Button(navFrame, text="D", command=lambda: Settings.openSettings(gui), image=SettingsIcon)
 text.grid(column=1,row=1) 
 
 
 
-dirbox.grid(column=1,row=0)
-enterButton.grid(column=2,row=0)
-upButton.grid(column=3,row=0)
-delButton.grid(column=4,row=0)
-settingsButton.grid(column=5,row=0)
+dirbox.grid(column=1,row=0, sticky=tk.W+tk.E)
+enterButton.grid(column=2,row=0, sticky=tk.W+tk.E)
+upButton.grid(column=3,row=0, sticky=tk.W+tk.E)
+delButton.grid(column=4,row=0, sticky=tk.W+tk.E)
+settingsButton.grid(column=5,row=0, sticky=tk.W+tk.E)
 
 
 gui.geometry("230x240")
 dirbox.delete(0,tk.END)
 dirbox.insert(0,getCurrentDir())
-# openDir(defaultdir)
 viewDir(getCurrentDir())
 
 
