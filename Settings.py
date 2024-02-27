@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 import json 
 from os import path
 
@@ -35,7 +36,7 @@ def openSettings(rootWindow):
     # Toplevel object which will 
     # be treated as a new window
     newWindow = tk.Toplevel(rootWindow)
-    defaultDirFrame = tk.Frame(newWindow)
+    defaultDirFrame = ttk.Frame(newWindow)
     defaultDirFrame.grid(row=1,column=0) 
     # sets the title of the
     # Toplevel widget
@@ -44,13 +45,13 @@ def openSettings(rootWindow):
     # sets the geometry of toplevel
     newWindow.geometry("200x200")
     # A Label widget to show in toplevel
-    Label = tk.Label(newWindow, text ="Default Path")
+    Label = ttk.Label(newWindow, text ="Default Path")
     Label.grid(row=0,column=0)
     
-    defaultDir = tk.Entry(defaultDirFrame)
+    defaultDir = ttk.Entry(defaultDirFrame)
     defaultDir.delete(0,tk.END)
     defaultDir.insert(0,getDefaultDir())
     defaultDir.grid(row=1,column=2)
 
-    tk.Button(defaultDirFrame, text="Apply", command=lambda: setDefaultPath(defaultDir.get())).grid(row=0,column=3)
+    ttk.Button(defaultDirFrame, text="Apply", command=lambda: setDefaultPath(defaultDir.get())).grid(row=0,column=3)
     defaultDir.grid(column=0,row=0)

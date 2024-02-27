@@ -17,7 +17,7 @@ if not hasDepends:
 import Settings
 from fileNav import *
 
-currentStyle = "clam"
+currentStyle = "breeze-dark"
 print(tk.TkVersion)
 
 root = tk.Tk()
@@ -33,7 +33,7 @@ if hasTksvg:
 root.geometry("350x350")
 #Style
 style = ttk.Style()
-ttkthemes.themed_style.ThemedStyle(theme="breeze")
+ttkthemes.themed_style.ThemedStyle(theme=currentStyle)
 root['bg'] = style.lookup(currentStyle, "background")
 ManagerLabel = ttk.Label(text="File Manager")
 ManagerLabel.pack()
