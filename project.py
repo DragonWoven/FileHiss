@@ -1,7 +1,9 @@
 hasDepends = True
 hasTksvg = True
+import ttkthemes
 try:
   import tkinter as tk
+  from tkinter import ttk
 except:
   hasDepends = False
   print("tkinter is missing!")
@@ -12,85 +14,94 @@ except:
   print("tksvg is missing!")
 if not hasDepends:
   exit()
-from subprocess import run
 import Settings
 from fileNav import *
 
+currentStyle = "clam"
+print(tk.TkVersion)
 
-
-
-
-gui = tk.Tk()
-gui.minsize(230, 240)
-navFrame = tk.Frame(gui)
-navFrame.grid(row=0, column=1, sticky=tk.W+tk.E)
-gui.title("File Manager")
-dirbox = tk.Entry(navFrame)
-currentDirButtons = []
-sb = tk.Scrollbar(gui)
-sb.grid(row=2, column=1,  sticky='e')
-lsbox = tk.Listbox(gui,height=10,width=20, yscrollcommand = sb.set)
-lsbox.grid(row=2,column=1,padx=20,pady=20)
+root = tk.Tk()
+tksvg.load(root)
+#Loading Icons
 if hasTksvg:
   TrashIcon = tksvg.SvgImage(file = "assets/trash.svg")
-  SettingsIcon = tksvg.SvgImage(file = "assets/settings.svg")
-text = tk.Label(text="File Manager")
-setCurrentDir(Settings.getDefaultDir())
+  SettingsIcon = tksvg.SvgImage(file = "assets\settings.svg")
+
+
+
+
+root.geometry("350x350")
+#Style
+style = ttk.Style()
+ttkthemes.themed_style.ThemedStyle(theme="breeze")
+root['bg'] = style.lookup(currentStyle, "background")
+ManagerLabel = ttk.Label(text="File Manager")
+ManagerLabel.pack()
+
+
+
+#---Nav----
+#Frame
+navFrame = ttk.Frame(root)
+navFrame.pack()
+#Wigets
+dirBox = ttk.Entry(navFrame)
+dirBox.grid(column=0,row=0)
+enterBtn = ttk.Button(navFrame, text="Enter", width=5, command=lambda: viewDir(dirBox.get()))
+enterBtn.grid(column=1,row=0)
+upDirBtn = ttk.Button(navFrame, text="^", width=1, command=lambda: upDir())
+upDirBtn.grid(column=2,row=0)
+if hasTksvg:
+  settingsBtn = ttk.Button(navFrame, width=1, command=lambda: Settings.openSettings(root), image=SettingsIcon)
+  trashsBtn = ttk.Button(navFrame, width=1, command=lambda: deleteSelected(), image=TrashIcon)
+else:
+  settingsBtn = ttk.Button(navFrame, width=1, command=lambda: Settings.openSettings(root), text="T")
+  trashsBtn = ttk.Button(navFrame, width=1, command=lambda: deleteSelected(), text="D")
+
+settingsBtn.grid(column=3,row=0)
+trashsBtn.grid(column=4,row=0)
+
+
+#File View
+baseFrame = ttk.Frame()
+baseFrame.pack()
+
+dirView = ttk.Treeview(baseFrame,show="tree")
+dirView.pack()
+def doubleClick(event):
+  selectedID = dirView.selection()
+  data = dirView.item(selectedID,"text")
+  chardir = list(getCurrentDir())
+  if chardir[len(chardir)-1] == "/":
+    newDir = getCurrentDir() + data
+  else:
+    newDir = getCurrentDir() + "/" + data
+  viewDir(newDir)
+dirView.bind("<Double-1>", doubleClick)
+
+
+
 
 def UpdateListBox(updatedList:list):
-  lsbox.delete(0,tk.END)
+  dirView.delete(*dirView.get_children())
   for i in updatedList:
-    lsbox.insert(tk.END,i)
+    dirView.insert('', tk.END, text=i)
   
+
+
 def viewDir(Dir):
-  try:
-    UpdateListBox(openDir(Dir))
-  except:
-    runFile(Dir)
-
-previousClick = ""
-def onClick(event):
-  global previousClick
-  selection = event.widget.curselection()
-  if selection:
-    index = selection[0]
-    data = event.widget.get(index)
-    if previousClick == data:
-      chardir = list(getCurrentDir())
-      if chardir[len(chardir)-1] == "/":
-        newDir = getCurrentDir() + data
-      else:
-        newDir = getCurrentDir() + "/" + data
-      viewDir(newDir)
-      previousClick = ""
-      dirbox.delete(0, tk.END)
-      dirbox.insert(0, newDir)
-    else:
-      previousClick = data
+  UpdateListBox(openDir(Dir))
+  dirBox.delete(0,tk.END)
+  dirBox.insert(0, Dir)
 
 
-
-
-
-lsbox.bind("<<ListboxSelect>>", onClick)
-
-def confirm(event):
-  viewDir(dirbox.get())
-
-gui.bind('<Return>', confirm)
-
-
-
-enterButton = tk.Button(navFrame,text="Enter",command=lambda: viewDir(dirbox.get()) ,anchor=tk.N,)
-
-def upDir(Dir):
-  newDir = getPrevDir(Dir)
-  dirbox.delete(0,tk.END)
-  dirbox.insert(0,newDir)
+def upDir():
+  newDir = getPrevDir(dirBox.get())
   viewDir(newDir)
 
-def delCurrent():
-  selected = lsbox.get(tk.ACTIVE)
+def deleteSelected():
+  selectedID = dirView.selection()
+  selected = dirView.item(selectedID,"text")
   Dir = list(getCurrentDir())
   if Dir[len(Dir) - 1] == "/":
     rmdir = getCurrentDir() + selected
@@ -100,31 +111,18 @@ def delCurrent():
   viewDir(getCurrentDir())
 
 
-upButton = tk.Button(navFrame,text="^", command=lambda: upDir(getCurrentDir()))
-if hasTksvg:
-  
-  delButton = tk.Button(navFrame, text="D", command=delCurrent, image=TrashIcon)
-  settingsButton = tk.Button(navFrame, text="D", command=lambda: Settings.openSettings(gui), image=SettingsIcon)
-else:
-  delButton = tk.Button(navFrame, text="D", command=delCurrent)
-  settingsButton = tk.Button(navFrame, text="S", command=lambda: Settings.openSettings(gui))
+for i in range(100):
+    text = f"Item #{i+1}"
+    dirView.insert("", "end", text=text)
 
-text.grid(column=1,row=1) 
+viewDir(Settings.getDefaultDir())
 
 
 
-dirbox.grid(column=1,row=0, sticky=tk.W+tk.E)
-enterButton.grid(column=2,row=0, sticky=tk.W+tk.E)
-upButton.grid(column=3,row=0, sticky=tk.W+tk.E)
-delButton.grid(column=4,row=0, sticky=tk.W+tk.E)
-settingsButton.grid(column=5,row=0, sticky=tk.W+tk.E)
-
-
-gui.geometry("230x240")
-dirbox.delete(0,tk.END)
-dirbox.insert(0,getCurrentDir())
-viewDir(getCurrentDir())
 
 
 
-gui.mainloop()
+
+
+
+root.mainloop()

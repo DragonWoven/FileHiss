@@ -114,4 +114,3 @@ def runFile(Dir):
   else:
     raise ValueError("File doesn't exits")
 
-print(getFileExtension(getFile("assets/trash.svg")))
