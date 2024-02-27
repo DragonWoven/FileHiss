@@ -17,7 +17,7 @@ if not hasDepends:
 import Settings
 from fileNav import *
 
-currentStyle = "breeze-dark"
+currentStyle = Settings.getTheme()
 print(tk.TkVersion)
 
 root = tk.Tk()
@@ -25,7 +25,7 @@ tksvg.load(root)
 #Loading Icons
 if hasTksvg:
   TrashIcon = tksvg.SvgImage(file = "assets/trash.svg")
-  SettingsIcon = tksvg.SvgImage(file = "assets\settings.svg")
+  SettingsIcon = tksvg.SvgImage(file = "assets/settings.svg")
 
 
 
