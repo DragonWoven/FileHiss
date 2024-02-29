@@ -2,6 +2,18 @@ import tkinter as tk
 from tkinter import ttk
 import json 
 from os import path
+import ttkthemes
+themes = ["classic", "default", "clam", "alt"]
+externalThemes = ["breeze", "awdark", "blue", "winxpblue", "ubuntu"]
+root = ""
+def start(rootwin,hasTtkthemes):
+    root = rootwin
+    if hasTtkthemes:
+        for i in externalThemes:
+            themes.append(i)
+    else:
+        if not getTheme() in themes:
+            setTheme("clam")
 
 if not path.exists("settings.json"):
     settingsfile = open("settings.json", "w")
@@ -42,10 +54,10 @@ def setTheme(theme):
     with open("settings.json","w") as settingsFileW:
         jsonData = json.dumps(settingsData)
         settingsFileW.write(jsonData)
+    ttkthemes.themed_style.ThemedStyle(theme=theme)
     
 
 def openSettings(rootWindow):
-     
     
     # Toplevel object which will 
     # be treated as a new window
@@ -61,13 +73,17 @@ def openSettings(rootWindow):
     style = ttk.Style()
     newWindow['bg'] = style.lookup(currentTheme, "background")
 
-    themes = ["clam", "classic", "breeze"]
+    
     theme = tk.StringVar(themeFrame)
     theme.set(currentTheme)
-    
+    def applyTheme(theme, style):
+        setTheme(theme)
+        rootWindow['bg'] = style.lookup(theme, "background")
+        newWindow['bg'] = style.lookup(theme, "background")
+
 
     themeMenu = ttk.OptionMenu(themeFrame, theme, currentTheme, *themes)
-    applyThemeBtn = ttk.Button(themeFrame, text="Apply", command=lambda: setTheme(theme.get()))
+    applyThemeBtn = ttk.Button(themeFrame, text="Apply", command=lambda: applyTheme(theme.get(), style))
     applyThemeBtn.grid(row=0,column=3)
  
     # sets the geometry of toplevel

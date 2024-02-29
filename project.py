@@ -1,6 +1,11 @@
 hasDepends = True
 hasTksvg = True
-import ttkthemes
+hasTtkthemes = True
+try: 
+  import ttkthemes
+except:
+  print("ttkthemse isn't present, some themes may be missing")
+  hasTtkthemes = False
 try:
   import tkinter as tk
   from tkinter import ttk
@@ -17,11 +22,12 @@ if not hasDepends:
 import Settings
 from fileNav import *
 
-currentStyle = Settings.getTheme()
-print(tk.TkVersion)
+
 
 root = tk.Tk()
+Settings.start(root, hasTtkthemes)
 root.title("File Manager")
+currentStyle = Settings.getTheme()
 tksvg.load(root)
 #Loading Icons
 if hasTksvg:
@@ -34,7 +40,10 @@ if hasTksvg:
 root.geometry("350x350")
 #Style
 style = ttk.Style()
-ttkthemes.themed_style.ThemedStyle(theme=currentStyle)
+if hasTtkthemes:
+  ttkthemes.themed_style.ThemedStyle(theme=currentStyle)
+else:
+  style.theme_use(currentStyle)
 root['bg'] = style.lookup(currentStyle, "background")
 ManagerLabel = ttk.Label(text="File Manager")
 ManagerLabel.pack()
