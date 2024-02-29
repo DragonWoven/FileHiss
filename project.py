@@ -1,6 +1,6 @@
 hasDepends = True
 hasTksvg = True
-hasTtkthemes = True
+hasTtkthemes = False
 try: 
   import ttkthemes
 except:

@@ -2,16 +2,25 @@ import tkinter as tk
 from tkinter import ttk
 import json 
 from os import path
-import ttkthemes
+try:
+    import ttkthemes
+except:
+    pass
+ttkthemesPresent = True
 themes = ["classic", "default", "clam", "alt"]
-externalThemes = ["breeze", "awdark", "blue", "winxpblue", "ubuntu"]
+#externalThemes = ["breeze", "awdark", "blue", "winxpblue", "ubuntu", "arc","clearlooks", "equilux", "itft1", "elegance","keramilk",]
+externalThemes = []   
 root = ""
 def start(rootwin,hasTtkthemes):
     root = rootwin
     if hasTtkthemes:
+        ttkthemes.ThemedStyle.pixmap_themes.append("breeze")
+        externalThemes = ttkthemes.ThemedStyle.pixmap_themes
         for i in externalThemes:
             themes.append(i)
+
     else:
+        ttkthemesPresent = False
         if not getTheme() in themes:
             setTheme("clam")
 
@@ -54,7 +63,8 @@ def setTheme(theme):
     with open("settings.json","w") as settingsFileW:
         jsonData = json.dumps(settingsData)
         settingsFileW.write(jsonData)
-    ttkthemes.themed_style.ThemedStyle(theme=theme)
+    if ttkthemesPresent:
+        ttkthemes.themed_style.ThemedStyle(theme=theme)
     
 
 def openSettings(rootWindow):
@@ -77,6 +87,8 @@ def openSettings(rootWindow):
     theme = tk.StringVar(themeFrame)
     theme.set(currentTheme)
     def applyTheme(theme, style):
+        if not ttkthemesPresent:
+            style.theme_use(theme)
         setTheme(theme)
         rootWindow['bg'] = style.lookup(theme, "background")
         newWindow['bg'] = style.lookup(theme, "background")
