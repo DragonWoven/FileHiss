@@ -21,6 +21,7 @@ currentStyle = Settings.getTheme()
 print(tk.TkVersion)
 
 root = tk.Tk()
+root.title("File Manager")
 tksvg.load(root)
 #Loading Icons
 if hasTksvg:
