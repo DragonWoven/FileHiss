@@ -25,7 +25,6 @@ from fileNav import *
 
 
 root = tk.Tk()
-Settings.start(root, hasTtkthemes)
 root.title("File Manager")
 currentStyle = Settings.getTheme()
 tksvg.load(root)
@@ -63,10 +62,10 @@ enterBtn.grid(column=1,row=0)
 upDirBtn = ttk.Button(navFrame, text="^", width=1, command=lambda: upDir())
 upDirBtn.grid(column=2,row=0)
 if hasTksvg:
-  settingsBtn = ttk.Button(navFrame, width=1, command=lambda: Settings.openSettings(), image=SettingsIcon)
+  settingsBtn = ttk.Button(navFrame, width=1, command=lambda: Settings.openSettings(root), image=SettingsIcon)
   trashsBtn = ttk.Button(navFrame, width=1, command=lambda: deleteSelected(), image=TrashIcon)
 else:
-  settingsBtn = ttk.Button(navFrame, width=1, command=lambda: Settings.openSettings(), text="T")
+  settingsBtn = ttk.Button(navFrame, width=1, command=lambda: Settings.openSettings(root), text="T")
   trashsBtn = ttk.Button(navFrame, width=1, command=lambda: deleteSelected(), text="D")
 
 settingsBtn.grid(column=3,row=0)

@@ -2,34 +2,35 @@ import tkinter as tk
 from tkinter import ttk
 import json 
 from os import path
+ttkthemesPresent = True
 try:
     import ttkthemes
 except:
-    pass
-ttkthemesPresent = True
+    ttkthemesPresent = False
+
 themes = ["classic", "default", "clam", "alt"]
 #externalThemes = ["breeze", "awdark", "blue", "winxpblue", "ubuntu", "arc","clearlooks", "equilux", "itft1", "elegance","keramilk",]
 externalThemes = []   
 root = ""
-def start(rootwin,hasTtkthemes):
-    global root
-    root = rootwin
-    if hasTtkthemes:
-        ttkthemes.ThemedStyle.pixmap_themes.append("breeze")
-        externalThemes = ttkthemes.ThemedStyle.pixmap_themes
-        for i in externalThemes:
-            themes.append(i)
+if ttkthemesPresent:
+    ttkthemes.ThemedStyle.pixmap_themes.append("breeze")
+    externalThemes = ttkthemes.ThemedStyle.pixmap_themes
+    for i in externalThemes:
+        themes.append(i)
 
-    else:
-        ttkthemesPresent = False
-        if not getTheme() in themes:
-            setTheme("clam")
+else:
+    ttkthemesPresent = False
+    if not getTheme() in themes:
+        setTheme("clam")
 
 if not path.exists("settings.json"):
+    defaultTheme = "clam"
+    if ttkthemesPresent:
+        defaultTheme = "breeze"
     settingsfile = open("settings.json", "w")
     settingsData = {
         "defaultDir": "/",
-        "theme" : "clam"
+        "theme" : defaultTheme
     }
     jsonSettings = json.dumps(settingsData)
     settingsfile.write(jsonSettings)
@@ -69,7 +70,7 @@ def setTheme(theme):
         ttkthemes.themed_style.ThemedStyle(theme=theme)
     
 
-def openSettings():
+def openSettings(root):
     currentTheme = getTheme()
     
     #Creating Window
