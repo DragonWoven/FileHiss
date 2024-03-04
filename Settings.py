@@ -45,7 +45,7 @@ def getDefaultDir():
 def getTheme():
     with open("settings.json","r") as settingsFile:
         return json.load(settingsFile)["theme"]
-currentTheme = getTheme()
+
 
 
 def setDefaultPath(path):
@@ -56,6 +56,7 @@ def setDefaultPath(path):
     with open("settings.json","w") as settingsFileW:
         jsonData = json.dumps(settingsData)
         settingsFileW.write(jsonData)
+
 def setTheme(theme):
     settingsData = {}
     with open("settings.json","r") as settingsFile:
@@ -69,22 +70,30 @@ def setTheme(theme):
     
 
 def openSettings():
+    currentTheme = getTheme()
     
-    # Toplevel object which will 
-    # be treated as a new window
+    #Creating Window
     newWindow = tk.Toplevel(root)
+    newWindow.title("Settings")
+    #Default Directory
     defaultDirFrame = ttk.Frame(newWindow)
     defaultDirFrame.grid(row=1,column=0)
+    defaultDir = ttk.Entry(defaultDirFrame)
+    defaultDir.delete(0,tk.END)
+    defaultDir.insert(0,getDefaultDir())
+    defaultDir.grid(row=1,column=2)
+    DefaultDirLbl = ttk.Label(newWindow, text ="Default Path")
+    DefaultDirLbl.grid(row=0,column=0)
+    ttk.Button(defaultDirFrame, text="Apply", command=lambda: setDefaultPath(defaultDir.get())).grid(row=0,column=3)
+    #Changing Theme
+    
+    
     themeFrame = ttk.Frame(newWindow)
+    themeLbl = ttk.Label(themeFrame, text="Theme")
+    themeLbl.grid(row=0,column=0)
     themeFrame.grid(row=2,column=0)
-    # sets the title of the
-    # Toplevel widget
-    newWindow.title("Settings")
-
     style = ttk.Style()
     newWindow['bg'] = style.lookup(currentTheme, "background")
-
-    
     theme = tk.StringVar(themeFrame)
     theme.set(currentTheme)
     def applyTheme(theme, style):
@@ -96,21 +105,16 @@ def openSettings():
 
 
     themeMenu = ttk.OptionMenu(themeFrame, theme, currentTheme, *themes)
+    themeMenu.grid(row=3,column=0)
     applyThemeBtn = ttk.Button(themeFrame, text="Apply", command=lambda: applyTheme(theme.get(), style))
-    applyThemeBtn.grid(row=0,column=3)
+    applyThemeBtn.grid(row=3,column=2)
  
     # sets the geometry of toplevel
     newWindow.geometry("255x255")
     newWindow.minsize(255, 255)
     # A Label widget to show in toplevel
-    Label = ttk.Label(newWindow, text ="Default Path")
-    Label.grid(row=0,column=0)
     
-    defaultDir = ttk.Entry(defaultDirFrame)
-    defaultDir.delete(0,tk.END)
-    defaultDir.insert(0,getDefaultDir())
-    defaultDir.grid(row=1,column=2)
-
-    ttk.Button(defaultDirFrame, text="Apply", command=lambda: setDefaultPath(defaultDir.get())).grid(row=0,column=3)
+    
+    
     defaultDir.grid(column=0,row=0)
-    themeMenu.grid(column=0,row=0)
+    
