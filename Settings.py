@@ -12,6 +12,7 @@ themes = ["classic", "default", "clam", "alt"]
 externalThemes = []   
 root = ""
 def start(rootwin,hasTtkthemes):
+    global root
     root = rootwin
     if hasTtkthemes:
         ttkthemes.ThemedStyle.pixmap_themes.append("breeze")
@@ -67,11 +68,11 @@ def setTheme(theme):
         ttkthemes.themed_style.ThemedStyle(theme=theme)
     
 
-def openSettings(rootWindow):
+def openSettings():
     
     # Toplevel object which will 
     # be treated as a new window
-    newWindow = tk.Toplevel(rootWindow)
+    newWindow = tk.Toplevel(root)
     defaultDirFrame = ttk.Frame(newWindow)
     defaultDirFrame.grid(row=1,column=0)
     themeFrame = ttk.Frame(newWindow)
@@ -90,7 +91,7 @@ def openSettings(rootWindow):
         if not ttkthemesPresent:
             style.theme_use(theme)
         setTheme(theme)
-        rootWindow['bg'] = style.lookup(theme, "background")
+        root['bg'] = style.lookup(theme, "background")
         newWindow['bg'] = style.lookup(theme, "background")
 
 
@@ -99,7 +100,8 @@ def openSettings(rootWindow):
     applyThemeBtn.grid(row=0,column=3)
  
     # sets the geometry of toplevel
-    newWindow.geometry("200x200")
+    newWindow.geometry("255x255")
+    newWindow.minsize(255, 255)
     # A Label widget to show in toplevel
     Label = ttk.Label(newWindow, text ="Default Path")
     Label.grid(row=0,column=0)

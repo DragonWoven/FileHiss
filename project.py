@@ -1,6 +1,6 @@
 hasDepends = True
 hasTksvg = True
-hasTtkthemes = False
+hasTtkthemes = True
 try: 
   import ttkthemes
 except:
@@ -37,7 +37,8 @@ if hasTksvg:
 
 
 
-root.geometry("350x350")
+root.geometry("360x360")
+root.minsize(360, 360)
 #Style
 style = ttk.Style()
 if hasTtkthemes:
@@ -62,10 +63,10 @@ enterBtn.grid(column=1,row=0)
 upDirBtn = ttk.Button(navFrame, text="^", width=1, command=lambda: upDir())
 upDirBtn.grid(column=2,row=0)
 if hasTksvg:
-  settingsBtn = ttk.Button(navFrame, width=1, command=lambda: Settings.openSettings(root), image=SettingsIcon)
+  settingsBtn = ttk.Button(navFrame, width=1, command=lambda: Settings.openSettings(), image=SettingsIcon)
   trashsBtn = ttk.Button(navFrame, width=1, command=lambda: deleteSelected(), image=TrashIcon)
 else:
-  settingsBtn = ttk.Button(navFrame, width=1, command=lambda: Settings.openSettings(root), text="T")
+  settingsBtn = ttk.Button(navFrame, width=1, command=lambda: Settings.openSettings(), text="T")
   trashsBtn = ttk.Button(navFrame, width=1, command=lambda: deleteSelected(), text="D")
 
 settingsBtn.grid(column=3,row=0)
