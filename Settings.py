@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import json 
 from os import path
+from fileNav import getFile
 ttkthemesPresent = True
 try:
     import ttkthemes
@@ -30,7 +31,8 @@ if not path.exists("settings.json"):
     settingsfile = open("settings.json", "w")
     settingsData = {
         "defaultDir": "/",
-        "theme" : defaultTheme
+        "theme" : defaultTheme,
+        "favorites": {}
     }
     jsonSettings = json.dumps(settingsData)
     settingsfile.write(jsonSettings)
@@ -47,7 +49,9 @@ def getTheme():
     with open("settings.json","r") as settingsFile:
         return json.load(settingsFile)["theme"]
 
-
+def getFavorites():
+    with open("settings.json","r") as settingsFile:
+        return json.load(settingsFile)["favorites"]
 
 def setDefaultPath(path):
     settingsData = {}
@@ -68,7 +72,18 @@ def setTheme(theme):
         settingsFileW.write(jsonData)
     if ttkthemesPresent:
         ttkthemes.themed_style.ThemedStyle(theme=theme)
-    
+
+
+
+def addFavorite(Dir):
+    settingsData = {}
+    with open("settings.json","r") as settingsFile:
+        settingsData = json.load(settingsFile)
+    settingsData["favorites"][getFile(Dir)] = Dir
+    with open("settings.json","w") as settingsFileW:
+        jsonData = json.dumps(settingsData)
+        settingsFileW.write(jsonData)
+
 
 def openSettings(root):
     currentTheme = getTheme()

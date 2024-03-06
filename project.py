@@ -36,8 +36,8 @@ if hasTksvg:
 
 
 
-root.geometry("360x360")
-root.minsize(360, 360)
+root.geometry("500x360")
+root.minsize(500, 360)
 #Style
 style = ttk.Style()
 if hasTtkthemes:
@@ -64,20 +64,29 @@ upDirBtn.grid(column=2,row=0)
 if hasTksvg:
   settingsBtn = ttk.Button(navFrame, width=1, command=lambda: Settings.openSettings(root), image=SettingsIcon)
   trashsBtn = ttk.Button(navFrame, width=1, command=lambda: deleteSelected(), image=TrashIcon)
+  FavBtn = ttk.Button(navFrame, width=1, command=lambda: addFav(), text="F")
 else:
   settingsBtn = ttk.Button(navFrame, width=1, command=lambda: Settings.openSettings(root), text="T")
   trashsBtn = ttk.Button(navFrame, width=1, command=lambda: deleteSelected(), text="D")
+  FavBtn = ttk.Button(navFrame, width=1, command=lambda: addFav(), text="F")
 
 settingsBtn.grid(column=3,row=0)
 trashsBtn.grid(column=4,row=0)
+FavBtn.grid(column=5,row=0)
+
+def addFav():
+  Settings.addFavorite(getCurrentDir())
+  UpdateFav(Settings.getFavorites())
 
 
 #File View
 baseFrame = ttk.Frame()
 baseFrame.pack()
 
-dirView = ttk.Treeview(baseFrame,show="tree")
-dirView.pack()
+dirFrame = ttk.Frame(baseFrame)
+dirFrame.pack()
+dirView = ttk.Treeview(dirFrame,show="tree")
+dirView.grid(row=0, column=2)
 def doubleClick(event):
   selectedID = dirView.selection()
   data = dirView.item(selectedID,"text")
@@ -92,11 +101,36 @@ dirView.bind("<Double-1>", doubleClick)
 
 
 
+
+
+
+seperator = ttk.Frame(dirFrame, width=50)
+seperator.grid(column=1,row=2)
+
+FavView = ttk.Treeview(dirFrame,show="tree")
+FavView.grid(row=0,column=0)
+
+def FavClick(event):
+  selectedID = FavView.selection()
+  data = FavView.item(selectedID,"text")
+  viewDir(Settings.getFavorites()[data])
+
+FavView.bind("<Double-1>", FavClick)
+
+
+
+
+
+
 def UpdateListBox(updatedList:list):
   dirView.delete(*dirView.get_children())
   for i in updatedList:
     dirView.insert('', tk.END, text=i)
-  
+
+def UpdateFav(updatedList:list):
+  FavView.delete(*FavView.get_children())
+  for i in updatedList:
+    FavView.insert('', tk.END, text=i)
 
 
 def viewDir(Dir):
@@ -133,6 +167,6 @@ viewDir(Settings.getDefaultDir())
 
 
 
-
+UpdateFav(Settings.getFavorites())
 
 root.mainloop()
