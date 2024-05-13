@@ -4,7 +4,7 @@ hasTtkthemes = True
 try: 
   import ttkthemes
 except:
-  print("ttkthemse isn't present, some themes may be missing")
+  print("ttkthemes isn't present, some themes may be missing")
   hasTtkthemes = False
 try:
   import tkinter as tk
@@ -19,8 +19,8 @@ except:
   print("tksvg is missing!")
 if not hasDepends:
   exit()
-import Settings
-from fileNav import *
+import FileManager.Settings as Settings
+from FileManager.fileNav import *
 
 
 

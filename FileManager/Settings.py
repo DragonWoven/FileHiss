@@ -2,24 +2,33 @@ import tkinter as tk
 from tkinter import ttk
 import json 
 from os import path
-from fileNav import getFile
+from FileManager.fileNav import getFile
 ttkthemesPresent = True
 try:
     import ttkthemes
 except:
     ttkthemesPresent = False
 
+
+def getTheme():
+    with open("settings.json","r") as settingsFile:
+        return json.load(settingsFile)["theme"]
+
+
 themes = ["classic", "default", "clam", "alt"]
 #externalThemes = ["breeze", "awdark", "blue", "winxpblue", "ubuntu", "arc","clearlooks", "equilux", "itft1", "elegance","keramilk",]
 externalThemes = []   
 root = ""
 if ttkthemesPresent:
+    print("ttkthemes presnt")
     ttkthemes.ThemedStyle.pixmap_themes.append("breeze")
     externalThemes = ttkthemes.ThemedStyle.pixmap_themes
     for i in externalThemes:
         themes.append(i)
-        if not getTheme() in themes:
-            setTheme("clam")
+        
+else:
+    if not getTheme() in themes:
+        setTheme("clam")
     
 
 if not path.exists("settings.json"):
@@ -43,9 +52,6 @@ def getDefaultDir():
     with open("settings.json","r") as settingsFile:
         return json.load(settingsFile)["defaultDir"]
 
-def getTheme():
-    with open("settings.json","r") as settingsFile:
-        return json.load(settingsFile)["theme"]
 
 def getFavorites():
     with open("settings.json","r") as settingsFile:
