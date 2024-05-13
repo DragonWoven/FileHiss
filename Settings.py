@@ -18,11 +18,9 @@ if ttkthemesPresent:
     externalThemes = ttkthemes.ThemedStyle.pixmap_themes
     for i in externalThemes:
         themes.append(i)
-
-else:
-    ttkthemesPresent = False
-    if not getTheme() in themes:
-        setTheme("clam")
+        if not getTheme() in themes:
+            setTheme("clam")
+    
 
 if not path.exists("settings.json"):
     defaultTheme = "clam"

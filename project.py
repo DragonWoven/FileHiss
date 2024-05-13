@@ -27,9 +27,11 @@ from fileNav import *
 root = tk.Tk()
 root.title("File Manager")
 currentStyle = Settings.getTheme()
-tksvg.load(root)
+
 #Loading Icons
+
 if hasTksvg:
+  tksvg.load(root)
   TrashIcon = tksvg.SvgImage(file = "assets/trash.svg")
   SettingsIcon = tksvg.SvgImage(file = "assets/settings.svg")
 
@@ -59,16 +61,16 @@ dirBox = ttk.Entry(navFrame)
 dirBox.grid(column=0,row=0)
 enterBtn = ttk.Button(navFrame, text="Enter", width=5, command=lambda: viewDir(dirBox.get()))
 enterBtn.grid(column=1,row=0)
-upDirBtn = ttk.Button(navFrame, text="^", width=1, command=lambda: upDir())
+upDirBtn = ttk.Button(navFrame, text="^", width=2, command=lambda: upDir())
 upDirBtn.grid(column=2,row=0)
 if hasTksvg:
   settingsBtn = ttk.Button(navFrame, width=1, command=lambda: Settings.openSettings(root), image=SettingsIcon)
   trashsBtn = ttk.Button(navFrame, width=1, command=lambda: deleteSelected(), image=TrashIcon)
   FavBtn = ttk.Button(navFrame, width=1, command=lambda: addFav(), text="F")
 else:
-  settingsBtn = ttk.Button(navFrame, width=1, command=lambda: Settings.openSettings(root), text="T")
-  trashsBtn = ttk.Button(navFrame, width=1, command=lambda: deleteSelected(), text="D")
-  FavBtn = ttk.Button(navFrame, width=1, command=lambda: addFav(), text="F")
+  settingsBtn = ttk.Button(navFrame, width=2, command=lambda: Settings.openSettings(root), text="S")
+  trashsBtn = ttk.Button(navFrame, width=2, command=lambda: deleteSelected(), text="D")
+  FavBtn = ttk.Button(navFrame, width=2, command=lambda: addFav(), text="F")
 
 settingsBtn.grid(column=3,row=0)
 trashsBtn.grid(column=4,row=0)
