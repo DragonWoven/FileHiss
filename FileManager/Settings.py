@@ -20,7 +20,6 @@ themes = ["classic", "default", "clam", "alt"]
 externalThemes = []   
 root = ""
 if ttkthemesPresent:
-    print("ttkthemes presnt")
     ttkthemes.ThemedStyle.pixmap_themes.append("breeze")
     externalThemes = ttkthemes.ThemedStyle.pixmap_themes
     for i in externalThemes:
