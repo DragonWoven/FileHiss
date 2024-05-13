@@ -34,6 +34,7 @@ if hasTksvg:
   tksvg.load(root)
   TrashIcon = tksvg.SvgImage(file = "assets/trash.svg")
   SettingsIcon = tksvg.SvgImage(file = "assets/settings.svg")
+  FavIcon = tksvg.SvgImage(file = "assets/favorite.svg")
 
 
 
@@ -66,7 +67,7 @@ upDirBtn.grid(column=2,row=0)
 if hasTksvg:
   settingsBtn = ttk.Button(navFrame, width=1, command=lambda: Settings.openSettings(root), image=SettingsIcon)
   trashsBtn = ttk.Button(navFrame, width=1, command=lambda: deleteSelected(), image=TrashIcon)
-  FavBtn = ttk.Button(navFrame, width=1, command=lambda: addFav(), text="F")
+  FavBtn = ttk.Button(navFrame, width=1, command=lambda: addFav(), image=FavIcon)
 else:
   settingsBtn = ttk.Button(navFrame, width=2, command=lambda: Settings.openSettings(root), text="S")
   trashsBtn = ttk.Button(navFrame, width=2, command=lambda: deleteSelected(), text="D")
